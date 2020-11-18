@@ -1,4 +1,96 @@
+<style>
+  .card {
+    background-color: lightgrey;
+  }
 
-<div>
-  <h1>Home page</h1>
+  .tab {
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+  }
+
+  .tab button {
+    background-color: inherit;
+    color: gray;
+    margin: 5px auto;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+  }
+  .tab button:hover {
+    color: black;
+  }
+  .tab button:focus {
+    outline: none;
+  }
+
+  .tab button.active {
+    border-bottom: 5px solid #fff;
+    color: black;
+  }
+
+  .tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border-top: none;
+  }
+
+</style>
+
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-md-7 m-auto">
+      <h1 class="text-center"> CHAT APP </h1>
+      <div class="p-5 card">
+        <div class="text-center">
+          <h1 class="h4 text-gray-900 mb-4">Welcome!</h1>
+        </div>
+        <div class="tab">
+          <button class="tablinks active" onclick="openForm(event, 'Login')">Login</button>
+          <button class="tablinks" onclick="openForm(event, 'Register')">Register</button>
+
+        </div>
+        <div id="Login" class="tabcontent">
+          <%- include('login') %>
+          <div class="text-center">
+            <a class="small" href="#">Forgot Password?</a>
+          </div>
+        </div>
+        <div id="Register" class="tabcontent">
+          <%- include('register') %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script>
+  document.getElementById('Login').style.display = "block";
+
+  function openForm(evt, formName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(formName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+</script>
+
