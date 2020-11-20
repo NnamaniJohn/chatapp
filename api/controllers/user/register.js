@@ -40,13 +40,16 @@ module.exports = {
     success: {
       statusCode: 201,
       description: 'New user created successfully',
+      responseType: 'redirect'
     },
     alreadyInUse: {
       statusCode: 400,
       description: 'Username or Email already in use',
+      responseType: 'redirect'
     },
     error: {
       description: 'An error occured please try again later.',
+      responseType: 'redirect'
     },
 
   },
@@ -79,20 +82,23 @@ module.exports = {
         },
       };
       await sails.helpers.sendMail(email);
+      this.req.addFlash('success', `An account has been created for ${newUser.email} successfully. Check your email to verify`);
 
-      return exits.success({
+      return exits.success('/', {
         message: `An account has been created for ${newUser.email} successfully. Check your email to verify`,
       });
 
     }
     catch (error) {
       if (error.code === 'E_UNIQUE') {
-        return exits.alreadyInUse({
+        this.req.addFlash('error', 'This username or email address already exits');
+        return exits.alreadyInUse('/', {
           message: 'Oops :) an error occurred',
           error: 'This username or email address already exits',
         });
       }
-      return exits.error({
+      this.req.addFlash('error', 'unable to complete registration. Please try again');
+      return exits.error('/', {
         message: 'Oops :) an error occurred',
         error: error.message,
       });

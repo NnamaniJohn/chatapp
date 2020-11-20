@@ -27,11 +27,13 @@ module.exports = {
     success: {
       description:
         'Password successfully updated, and requesting user agent automatically logged in',
+      responseType: 'redirect'
     },
     invalidToken: {
       statusCode: 401,
       description:
         'The provided password token is invalid, expired, or has already been used.',
+      responseType: 'redirect'
     },
 
   },
@@ -39,13 +41,15 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     if (!inputs.token) {
-      return exits.invalidToken({
+      this.req.addFlash('error', 'Your reset token is either invalid or expired1');
+      return exits.invalidToken('/', {
         error: 'Your reset token is either invalid or expired1',
       });
     }
     var user = await User.findOne({ passwordResetToken: inputs.token });
     if (!user || user.passwordResetTokenExpiresAt <= Date.now()) {
-      return exits.invalidToken({
+      this.req.addFlash('error', 'Your reset token is either invalid or expired2');
+      return exits.invalidToken('/', {
         error: 'Your reset token is either invalid or expired2',
       });
     }
@@ -61,7 +65,8 @@ module.exports = {
 
     const token = await sails.helpers.generateNewJwtToken(user.email);
     this.req.user = user;
-    return exits.success({
+    this.req.addFlash('success', `Password reset successful. ${user.email} has been logged in`);
+    return exits.success('/', {
       message: `Password reset successful. ${user.email} has been logged in`,
       data: user,
       token,

@@ -1,0 +1,23 @@
+<img class="" src="<%= data.avatar %>">
+<div class="">
+  <form action="<%= '/user/update/'+  data.id %>" method="post" class="">
+    <div class="">
+      <label>Name</label>
+      <input type="text" name="name" value="<%= data.name %>">
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="text" name="email" value="<%= data.email %>">
+    </div>
+    <div class="field">
+      <label>Location</label>
+      <input type="text" name="location" value="<%= data.location %>">
+    </div>
+    <div class="field">
+      <label>Bio</label>
+      <textarea name="bio" rows="4" cols="40"><%= data.bio %></textarea>
+    </div>
+    <input type="hidden" name="avatar" value=<%=data.avatar %>>
+    <button class="" type="submit">Update</button>
+  </form>
+</div>

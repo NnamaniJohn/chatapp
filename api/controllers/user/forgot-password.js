@@ -21,8 +21,8 @@ module.exports = {
 
   exits: {
     success: {
-      description:
-        'Email matched a user and a recovery email might have been sent',
+      description: 'Email matched a user and a recovery email might have been sent',
+      responseType: 'redirect'
     },
 
   },
@@ -57,7 +57,8 @@ module.exports = {
       sails.log(error);
     }
 
-    return exits.success({
+    this.req.addFlash('success', `A reset password email has been sent to ${user.email}.`);
+    return exits.success('/', {
       message: `A reset password email has been sent to ${user.email}.`,
     });
 

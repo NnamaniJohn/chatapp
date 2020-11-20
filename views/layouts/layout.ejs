@@ -40,6 +40,26 @@
 
   <body>
 
+    <%- include('nav') %>
+
+    <% flash.get('error').forEach(function (message) { %>
+    <div id="success" class="container">
+      <div class="alert alert-danger">
+        <button type="button" class="close" onclick="$('#success').hide();">&times;</button>
+        <strong><%= message %></strong>
+      </div>
+    </div>
+    <% }) %>
+
+    <% flash.get('success').forEach(function (message) { %>
+    <div id="success" class="container">
+      <div class="alert alert-success">
+        <button type="button" class="close" onclick="$('#success').hide();">&times;</button>
+        <strong><%= message %></strong>
+      </div>
+    </div>
+    <% }) %>
+
 
     <%- body %>
 
@@ -113,6 +133,7 @@
     <script src="/dependencies/sails.io.js"></script>
     <script src="/dependencies/bootstrap-4/bootstrap-4.bundle.js"></script>
     <script src="/dependencies/jquery.min.js"></script>
+    <script src="/js/app.js"></script>
     <!--SCRIPTS END-->
   </body>
 </html>
