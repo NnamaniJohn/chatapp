@@ -45,12 +45,10 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    console.log('in mm');
     try {
-      console.log('qweem');
       const user = await User.findOne({ email: inputs.email });
       if (!user) {
-        console.log('plkhg');
+        this.req.addFlash('error', `An account belonging to ${inputs.email} was not found`);
         return exits.notAUser('/', {
           error: `An account belonging to ${inputs.email} was not found`,
         });
@@ -81,7 +79,7 @@ module.exports = {
           error: error.raw,
         });
       }
-      this.req.addFlash('error', 'Error logging in user ${inputs.email}');
+      this.req.addFlash('error', `Error logging in user ${inputs.email}`);
       return exits.error('/', {
         message: `Error logging in user ${inputs.email}`,
         error: error.message,

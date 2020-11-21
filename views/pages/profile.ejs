@@ -1,23 +1,37 @@
-<img class="" src="<%= data.avatar %>">
-<div class="">
-  <form action="<%= '/user/update/'+  data.id %>" method="post" class="">
-    <div class="">
-      <label>Name</label>
-      <input type="text" name="name" value="<%= data.name %>">
+
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-md-7 m-auto">
+      <div class="p-5 card">
+        <div class="text-center">
+          <h1 class="h4 text-gray-900 mb-4">Profile!</h1>
+        </div>
+        <div class="d-flex justify-content-center my-3">
+          <img class="mr-3 mt-3 rounded-circle w-50" src="<%= profile.avatar %>">
+        </div>
+        <div class="">
+          <form action="<%= '/profile/'+  profile.id + '/update' %>" method="post" class="">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" class="form-control form-control-user" name="firstname" value="<%= profile.firstname %>">
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" class="form-control form-control-user" name="lastname" value="<%= profile.lastname %>">
+            </div>
+            <div class="form-group">
+              <label>Location</label>
+              <input type="text" class="form-control form-control-user" name="location" value="<%= profile.location %>">
+            </div>
+            <div class="form-group">
+              <label>Bio</label>
+              <textarea name="bio" class="form-control form-control-user" rows="4" cols="40"><%= profile.bio %></textarea>
+            </div>
+            <input type="hidden" name="avatar" value=<%=profile.avatar %>>
+            <button class="btn btn-primary btn-user btn-block" type="submit">Update</button>
+          </form>
+        </div>
+      </div>
     </div>
-    <div class="field">
-      <label>Email</label>
-      <input type="text" name="email" value="<%= data.email %>">
-    </div>
-    <div class="field">
-      <label>Location</label>
-      <input type="text" name="location" value="<%= data.location %>">
-    </div>
-    <div class="field">
-      <label>Bio</label>
-      <textarea name="bio" rows="4" cols="40"><%= data.bio %></textarea>
-    </div>
-    <input type="hidden" name="avatar" value=<%=data.avatar %>>
-    <button class="" type="submit">Update</button>
-  </form>
+  </div>
 </div>

@@ -33,7 +33,8 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  'GET /profile': { view: 'pages/profile' },
+  'GET /profile/:userId': 'profile/index',
+  'POST /profile/:profileId/update': 'profile/update',
   'GET /chat': { view: 'pages/chatroom' },
   'GET /user/forgotpassword': { view: 'pages/forgotpassword' },
   'GET /user/resetpassword': { view: 'pages/resetpassword' },

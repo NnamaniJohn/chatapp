@@ -71,6 +71,13 @@ module.exports = {
         emailProofTokenExpiresAt: Date.now() + sails.config.custom.emailProofTokenTTL,
       }).fetch();
 
+      let userProfile = await Profile.create({
+        bio: '',
+        location: '',
+        avatar: '/images/person_1.jpg',
+        userId: newUser.id,
+      });
+
       const confirmLink = `${sails.config.custom.baseUrl}/user/confirm?token=${token}`;
       const email = {
         to: newUser.email,
