@@ -48,7 +48,6 @@ module.exports = {
     try {
       const user = await User.findOne({ email: inputs.email });
       if (!user) {
-        this.req.addFlash('error', `An account belonging to ${inputs.email} was not found`);
         return exits.notAUser('/', {
           error: `An account belonging to ${inputs.email} was not found`,
         });
@@ -60,11 +59,14 @@ module.exports = {
           exits.passwordMismatch('/', { error: error.message });
         });
       const token = await sails.helpers.generateNewJwtToken(user.email);
+      this.req.session.userId = user.id;
+      this.req.session.authenticated = true;
+
       this.req.user = user;
 
       this.req.addFlash('success', `${user.email} has been logged in`);
 
-      return exits.success('/', {
+      return exits.success('/chat', {
         message: `${user.email} has been logged in`,
         data: user,
         token,
@@ -79,7 +81,7 @@ module.exports = {
           error: error.raw,
         });
       }
-      this.req.addFlash('error', `Error logging in user ${inputs.email}`);
+      this.req.addFlash('error', 'Error logging in user ${inputs.email}');
       return exits.error('/', {
         message: `Error logging in user ${inputs.email}`,
         error: error.message,

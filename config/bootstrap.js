@@ -27,4 +27,6 @@ module.exports.bootstrap = async function() {
   // ]);
   // ```
 
+  sails.config.appName = 'Chat App';
+
 };

@@ -76,7 +76,7 @@ module.exports = {
         location: '',
         avatar: '/images/person_1.jpg',
         userId: newUser.id,
-      });
+      }).fetch();
 
       const confirmLink = `${sails.config.custom.baseUrl}/user/confirm?token=${token}`;
       const email = {
@@ -89,6 +89,7 @@ module.exports = {
         },
       };
       await sails.helpers.sendMail(email);
+      User.publish([newUser.id], newUser);
       this.req.addFlash('success', `An account has been created for ${newUser.email} successfully. Check your email to verify`);
 
       return exits.success('/', {

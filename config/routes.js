@@ -33,18 +33,22 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  '/profile': 'chat/index',
   'GET /profile/:userId': 'profile/index',
   'POST /profile/:profileId/update': 'profile/update',
-  'GET /chat': { view: 'pages/chatroom' },
+  'GET /chat': 'chat/index',
   'GET /user/forgotpassword': { view: 'pages/forgotpassword' },
   'GET /user/resetpassword': { view: 'pages/resetpassword' },
 
   'POST /user/register': 'user/register',
   'GET /user/confirm': 'user/confirm',
   'POST /user/:id': 'user/update',
+  'GET /user': 'user/index',
   'POST /user/login': 'user/login',
+  '/user/logout': 'user/logout',
   'POST /user/forgot-password': 'user/forgot-password',
   'POST /user/reset-password': 'user/reset-password',
+  '/postMessage': 'chat/postmessage',
 
 
 };

@@ -40,7 +40,9 @@
 
   <body>
 
-    <%- include('nav') %>
+    <% if(req.session.authenticated) { %>
+      <%- include('nav') %>
+    <%}%>
 
     <% flash.get('error').forEach(function (message) { %>
     <div id="success" class="container">
@@ -133,6 +135,129 @@
     <script src="/dependencies/sails.io.js"></script>
     <script src="/dependencies/bootstrap-4/bootstrap-4.bundle.js"></script>
     <script src="/dependencies/jquery.min.js"></script>
+    <script src="/dependencies/jsrender.js"></script>
+    <script src="/js/app.js"></script>
     <!--SCRIPTS END-->
+
+    <script id="usersTemplate" type="text/x-jsrender">
+      <div class="item row my-2">
+        <div class="col-4 p-2 d-flex justify-content-end">
+          <img class="rounded-circle w-50" src="{{:avatar}}">
+        </div>
+        <div class="col-8 content p-1 h-25 my-auto">
+          <div class="h4">{{:fullname}}</div>
+        </div>
+      </div>
+    </script>
+    <script id="chatTemplate" type="text/x-jsrender">
+      <div class="event row p-2">
+        <div class="label col-2 d-flex justify-content-end">
+           <img class="rounded-circle w-50" src="/images/person_1.jpg">
+        </div>
+        <div class="content col-10">
+          <div class="summary">
+            <a href="#"> fullname </a> posted on
+              {{:createdAt}}
+          </div>
+          <div class="extra text">
+               {{:message}}
+          </div>
+        </div>
+      </div>
+    </script>
+    <script>
+
+      window.onload = function() {
+        loadUsers();
+        loadMessages();
+        activateChat();
+      };
+
+      function loadUsers() {
+        // Load existing users
+        io.socket.get('/user', (users, response) => {
+          renderChatUsers(users);
+        });
+
+        // Listen for new & updated users
+        io.socket.on('user', (body) => {
+          io.socket.get('/user', (users, response) => {
+            renderChatUsers(users);
+          });
+        });
+      }
+
+      function renderChatUsers(data) {
+        const template = $.templates('#usersTemplate');
+        let htmlOutput = template.render(data);
+        $('#users-content').html(htmlOutput);
+      }
+
+    </script>
+    <script type="text/javascript">
+
+      function loadMessages() {
+        // Load existing chat messages
+        io.socket.get('/chatMessage', function(messages, response) {
+          renderChatMessages(messages);
+        });
+
+        // Listen for new chat messages
+        io.socket.on('chatmessage', function(body) {
+          if (body.verb === 'published') {
+            console.log(body);
+          }
+          console.log(body.data);
+          renderChatMessages(body.data);
+        });
+      }
+
+      function renderChatMessages(data) {
+        const chatContent = $('#chat-content');
+        const template = $.templates('#chatTemplate');
+        let htmlOutput = template.render(data);
+        chatContent.append(htmlOutput);
+        // automatically scroll downwards
+        const scrollHeight = chatContent.prop("scrollHeight");
+        chatContent.animate({ scrollTop: scrollHeight }, "slow");
+      }
+
+    </script>
+    <script type="text/javascript">
+
+      function activateChat() {
+        const postField = $('#post-field');
+        const postButton = $('#post-btn');
+        const postErr = $('#post-err');
+
+        // Bind to click event
+        postButton.click(postMessage);
+
+        // Bind to enter key event
+        postField.keypress(function(e) {
+          var keycode = (e.keyCode ? e.keyCode : e.which);
+          if (keycode == '13') {
+            postMessage();
+          }
+        });
+
+        function postMessage() {
+          if(postField.val() == "") {
+            alert("Please type a message!");
+          } else {
+            let text = postField.val();
+            io.socket.post('/postMessage', { message: text, id: req.session.userId }, function(resData, jwRes) {
+              if(jwRes.statusCode != 200) {
+                postErr.html("<p>" +  resData.message +"</p>")
+                postErr.show();
+              } else {
+                postField.val(''); // clear input field
+              }
+            });
+          }
+        }
+      }
+
+    </script>
   </body>
 </html>
