@@ -49,6 +49,7 @@ module.exports.routes = {
   'POST /user/forgot-password': 'user/forgot-password',
   'POST /user/reset-password': 'user/reset-password',
   '/postMessage': 'chat/postmessage',
+  '/chatMessage': 'chat/message',
 
 
 };

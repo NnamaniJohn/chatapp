@@ -152,11 +152,11 @@
     <script id="chatTemplate" type="text/x-jsrender">
       <div class="event row p-2">
         <div class="label col-2 d-flex justify-content-end">
-           <img class="rounded-circle w-50" src="/images/person_1.jpg">
+           <img class="rounded-circle w-50" src="{{:avatar}}">
         </div>
         <div class="content col-10">
           <div class="summary">
-            <a href="#"> fullname </a> posted on
+            <a href="#"> {{:createdBy}} </a> posted on
               {{:createdAt}}
           </div>
           <div class="extra text">
@@ -208,6 +208,9 @@
             console.log(body);
           }
           console.log(body.data);
+          io.socket.get('/chatMessage', function(messages, response) {
+            renderChatMessages(messages);
+          });
           renderChatMessages(body.data);
         });
       }
@@ -246,7 +249,7 @@
             alert("Please type a message!");
           } else {
             let text = postField.val();
-            io.socket.post('/postMessage', { message: text, id: req.session.userId }, function(resData, jwRes) {
+            io.socket.post('/postMessage', { message: text, id:<%= req.session.userId %> }, function(resData, jwRes) {
               if(jwRes.statusCode != 200) {
                 postErr.html("<p>" +  resData.message +"</p>")
                 postErr.show();

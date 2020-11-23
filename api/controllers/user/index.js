@@ -45,7 +45,6 @@ module.exports = {
           ids.push(user[i].id);
         }
       }
-      User.subscribe(ids);
 
       return exits.success(data);
     } catch (error) {
